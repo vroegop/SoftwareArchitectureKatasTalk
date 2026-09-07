@@ -53,7 +53,7 @@ function Sticky({ sticky, index, x, y, onClick }: { sticky: RiskSticky; index: n
   )
 }
 
-export function RiskStormBoard({ spec, seeds }: { spec: DiagramSpec; seeds?: SeedRisk[] }) {
+export function RiskStormBoard({ spec, seeds, diagramMaxHeight = 'var(--stage-diagram-max)' }: { spec: DiagramSpec; seeds?: SeedRisk[]; diagramMaxHeight?: string }) {
   const stickies = useRisks(spec.id)
   const names = useElementNames(spec)
   const [target, setTarget] = useState<string | null>(null)
@@ -88,7 +88,7 @@ export function RiskStormBoard({ spec, seeds }: { spec: DiagramSpec; seeds?: See
   return (
     <div className="risk-board stage-split">
       <div className="risk-diagram">
-        <DiagramRenderer spec={spec} onElementClick={(id) => setTarget(id)} selectedId={target ?? undefined} overlay={overlay} showDescriptions={false} maxHeight="var(--stage-diagram-max)" />
+        <DiagramRenderer spec={spec} onElementClick={(id) => setTarget(id)} selectedId={target ?? undefined} overlay={overlay} showDescriptions={false} maxHeight={diagramMaxHeight} />
       </div>
       <div className="risk-panel stack" data-keys="local">
         <div className="row-between">

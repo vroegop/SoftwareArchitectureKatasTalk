@@ -1,6 +1,6 @@
 import { Link } from 'react-router-dom'
 import { SECTION_LABELS, type PageDef } from '../../content/types'
-import { mainTrack, neighbours, positionLabel } from '../../app/registry'
+import { mainTrack, neighbours, positionLabel, talkNext, talkPrev } from '../../app/registry'
 import { useStore } from '../../app/stores/createStore'
 import { settingsStore, toggleNotes } from '../../app/stores/settingsStore'
 import { ui } from '../../app/stores/uiStore'
@@ -9,6 +9,8 @@ import { TimerPill } from '../overlays/TimerPill'
 export function PageFooter({ page }: { page?: PageDef }) {
   const settings = useStore(settingsStore)
   const n = page ? neighbours(page.id) : {}
+  const prev = page ? talkPrev(page.id) : undefined
+  const next = page ? talkNext(page.id) : undefined
   return (
     <footer className="app-footer">
       <div className="footer-left">
@@ -28,8 +30,8 @@ export function PageFooter({ page }: { page?: PageDef }) {
             ↑ {n.up.title}
           </Link>
         ) : null}
-        {n.prev ? (
-          <Link className="btn btn-sm" to={n.prev.path} title="Previous (←)" aria-label={`Previous: ${n.prev.title}`}>
+        {prev ? (
+          <Link className="btn btn-sm" to={prev.path} title="Previous page (Shift + ←)" aria-label={`Previous: ${prev.title}`}>
             ←
           </Link>
         ) : (
@@ -37,8 +39,8 @@ export function PageFooter({ page }: { page?: PageDef }) {
             ←
           </span>
         )}
-        {n.next ? (
-          <Link className="btn btn-sm" to={n.next.path} title="Next (→)" aria-label={`Next: ${n.next.title}`}>
+        {next ? (
+          <Link className="btn btn-sm" to={next.path} title="Next page (Shift + →)" aria-label={`Next: ${next.title}`}>
             →
           </Link>
         ) : (

@@ -1,6 +1,7 @@
 import type { PageProps } from '../app/pageComponents'
+import { useStepIndex } from '../app/stepParams'
 import { useStepHandler } from '../app/steps'
-import { useSearchParamList, useSearchParamState } from '../app/useSearchParamState'
+import { useSearchParamList } from '../app/useSearchParamState'
 import { characteristics, characteristicById, CHARACTERISTIC_GROUP_LABELS } from '../content/characteristics'
 import { characteristicExamples, characteristicRules } from '../content/characteristics-extra'
 import { westhavenPicks } from '../content/example'
@@ -8,40 +9,27 @@ import type { CharacteristicId } from '../content/types'
 import { PageShell } from '../components/shell/PageShell'
 import { SegmentedControl } from '../components/widgets/SegmentedControl'
 
+/** Step 0: nothing revealed; step n: the worked answer for context n-1. */
+const STEP_COUNT = westhavenPicks.length + 1
+
 export default function CharacteristicsPage({ page }: PageProps) {
   const [picked, setPicked] = useSearchParamList('pick')
-  const [contextId, setContext] = useSearchParamState('context', westhavenPicks[0].contextId)
-  const [reveal, setReveal] = useSearchParamState('reveal', '0')
-  const revealed = reveal === '1'
-  const contextIndex = Math.max(
-    0,
-    westhavenPicks.findIndex((p) => p.contextId === contextId),
-  )
+  const [step, setStep] = useStepIndex('reveal', STEP_COUNT)
+  const revealed = step > 0
+  const contextIndex = Math.max(0, step - 1)
   const pick = westhavenPicks[contextIndex]
   const matches = picked.filter((id) => (pick.top3 as string[]).includes(id)).length
 
   useStepHandler(
     () => {
-      if (!revealed) {
-        setReveal('1')
-        return true
-      }
-      if (contextIndex < westhavenPicks.length - 1) {
-        setContext(westhavenPicks[contextIndex + 1].contextId)
-        return true
-      }
-      return false
+      if (step >= STEP_COUNT - 1) return false
+      setStep(step + 1)
+      return true
     },
     () => {
-      if (contextIndex > 0) {
-        setContext(westhavenPicks[contextIndex - 1].contextId)
-        return true
-      }
-      if (revealed) {
-        setReveal(null)
-        return true
-      }
-      return false
+      if (step <= 0) return false
+      setStep(step - 1)
+      return true
     },
   )
 
@@ -76,12 +64,12 @@ export default function CharacteristicsPage({ page }: PageProps) {
               })}
             </div>
             <div className="row-between">
-              <span className="small muted">{picked.length} of 3 chosen. Space reveals the worked answer.</span>
+              <span className="small muted">{picked.length} of 3 chosen. Forward reveals the worked answer, then two other contexts.</span>
               <span className="btn-group">
                 <button type="button" className="btn btn-sm btn-ghost" onClick={() => setPicked([])} disabled={picked.length === 0}>
                   Clear
                 </button>
-                <button type="button" className="btn btn-sm btn-primary" onClick={() => setReveal(revealed ? null : '1')}>
+                <button type="button" className="btn btn-sm btn-primary" onClick={() => setStep(revealed ? 0 : 1)}>
                   {revealed ? 'Hide the answer' : 'Reveal the worked answer'}
                 </button>
               </span>
@@ -92,7 +80,7 @@ export default function CharacteristicsPage({ page }: PageProps) {
               <SegmentedControl
                 options={westhavenPicks.map((p) => ({ id: p.contextId, label: p.contextLabel }))}
                 value={pick.contextId}
-                onChange={setContext}
+                onChange={(id) => setStep(Math.max(0, westhavenPicks.findIndex((p) => p.contextId === id)) + 1)}
                 ariaLabel="Context"
               />
               <p className="small muted">{pick.contextDescription}</p>

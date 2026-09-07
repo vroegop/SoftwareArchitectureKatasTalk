@@ -1,6 +1,6 @@
 import { Link } from 'react-router-dom'
 import type { PageProps } from '../app/pageComponents'
-import { useSearchParamState } from '../app/useSearchParamState'
+import { useStepId } from '../app/stepParams'
 import { characteristics } from '../content/characteristics'
 import { architectureStyles, styleById } from '../content/styles'
 import type { CharacteristicId, StyleId } from '../content/types'
@@ -14,9 +14,11 @@ const average = Object.fromEntries(
   characteristics.map((c) => [c.id, architectureStyles.reduce((sum, s) => sum + s.ratings[c.id], 0) / architectureStyles.length]),
 ) as Record<CharacteristicId, number>
 
+const TAB_IDS = ['topology', 'ratings', 'use', 'tradeoffs', 'westhaven'] as const
+
 export default function StylePage({ page }: PageProps) {
   const style = styleById[page.param as StyleId]
-  const [tab, setTab] = useSearchParamState('tab', 'topology')
+  const [tab, setTab] = useStepId('tab', TAB_IDS)
   if (!style) return <PageShell page={page}>Unknown style.</PageShell>
 
   const aside = (

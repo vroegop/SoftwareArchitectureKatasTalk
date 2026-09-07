@@ -16,18 +16,8 @@ export default function LiveC1Page({ page }: PageProps) {
   return (
     <PageShell page={page} heroAside={<BigTimer preset={timerPresetById[page.timerPreset ?? 'c1-round']} label={kata ? `C1 · ${kata.title}` : undefined} />}>
       <div className="live-grid">
-        <Checklist list={list} big />
         <section className="stack">
-          {kata ? (
-            <KataCard kata={kata} compact />
-          ) : (
-            <div className="card card-sm stack-sm">
-              <p className="muted">No kata picked yet.</p>
-              <Link className="btn btn-sm btn-primary" to="/library">
-                Pick a kata →
-              </Link>
-            </div>
-          )}
+          <Checklist list={list} big />
           <div className="stack-sm">
             <p className="eyebrow">Ask the customer</p>
             <ul className="bullets">
@@ -37,6 +27,16 @@ export default function LiveC1Page({ page }: PageProps) {
             </ul>
           </div>
         </section>
+        {kata ? (
+          <KataCard kata={kata} brief />
+        ) : (
+          <div className="card card-sm stack-sm">
+            <p className="muted">No kata picked yet.</p>
+            <Link className="btn btn-sm btn-primary" to="/library">
+              Pick a kata →
+            </Link>
+          </div>
+        )}
       </div>
     </PageShell>
   )

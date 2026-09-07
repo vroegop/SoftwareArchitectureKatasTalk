@@ -1,17 +1,13 @@
 import { Link } from 'react-router-dom'
 import type { PageProps } from '../app/pageComponents'
 import { live, useLive } from '../app/stores/liveStore'
-import { useSearchParamState } from '../app/useSearchParamState'
 import { kataById, katas } from '../content/katas'
 import { PageShell } from '../components/shell/PageShell'
 import { KataPicker } from '../components/widgets/KataPicker'
 
-const allTags = Array.from(new Set(katas.flatMap((k) => k.tags))).sort()
-
 export default function LibraryPage({ page }: PageProps) {
   const state = useLive()
-  const [tag, setTag] = useSearchParamState('tag', '')
-  const visible = tag ? katas.filter((k) => k.tags.includes(tag)) : katas
+  const visible = katas
   const picked = state.kataId ? kataById[state.kataId] : undefined
 
   const aside = picked ? (
@@ -34,49 +30,41 @@ export default function LibraryPage({ page }: PageProps) {
       <div className="stack">
         <div className="row-between">
           <KataPicker katas={katas} usedIds={state.usedKataIds} onPick={live.pickKata} />
-          <div className="row" data-keys="local">
-            <span className="small muted">Filter</span>
-            <button type="button" className="pick-chip" aria-pressed={tag === ''} onClick={() => setTag(null)}>
-              all
-            </button>
-            {allTags.map((t) => (
-              <button key={t} type="button" className="pick-chip" aria-pressed={tag === t} onClick={() => setTag(tag === t ? null : t)}>
-                {t}
-              </button>
-            ))}
-          </div>
+          <span className="small muted">Hover a row for its summary; the difficulty chip is a hint for first-timers.</span>
         </div>
-        <div className="grid-auto">
+        <ul className="kata-rows">
           {visible.map((kata) => {
             const isPicked = picked?.id === kata.id
             const used = state.usedKataIds.includes(kata.id)
             return (
-              <article key={kata.id} className={`card card-sm stack-sm${isPicked ? ' is-selected' : ''}`}>
-                <div className="row-between">
-                  <span className="chip">{kata.difficulty}</span>
-                  {used && !isPicked ? <span className="chip muted">used</span> : null}
-                </div>
-                <h3 className="card-title">{kata.title}</h3>
-                <p className="small">{kata.summary}</p>
-                <div className="row">
+              <li key={kata.id} className={`kata-row${isPicked ? ' is-selected' : ''}`} title={kata.summary}>
+                <span className="chip">{kata.difficulty}</span>
+                <span className="kata-row-main">
+                  <Link className="kata-row-title" to={`/library/${kata.id}`}>
+                    {kata.title}
+                  </Link>
+                  <span className="kata-row-summary small muted">{kata.summary.split('. ')[0].replace(/\.$/, '')}.</span>
+                </span>
+                <span className="row kata-row-tags">
                   {kata.tags.map((t) => (
                     <span key={t} className="chip">
                       {t}
                     </span>
                   ))}
-                </div>
-                <div className="btn-group">
+                  {used && !isPicked ? <span className="chip muted">used</span> : null}
+                </span>
+                <span className="btn-group">
                   <Link className="btn btn-sm" to={`/library/${kata.id}`}>
                     Read
                   </Link>
                   <button type="button" className="btn btn-sm btn-primary" aria-pressed={isPicked} onClick={() => live.pickKata(kata.id)}>
                     {isPicked ? 'Picked' : 'Use this kata'}
                   </button>
-                </div>
-              </article>
+                </span>
+              </li>
             )
           })}
-        </div>
+        </ul>
         <p className="small muted">
           Katas by Ted Neward and Neal Ford, lightly paraphrased; each card links to the original. Press <kbd>↓</kbd> to read them one by one.
         </p>

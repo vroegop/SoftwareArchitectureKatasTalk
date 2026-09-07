@@ -31,7 +31,7 @@ export default function RiskStormingPage({ page }: PageProps) {
           <span className="chip risk-chip-high">6–9 high</span>
           <span className="muted">Technique by Simon Brown, riskstorming.com. Stickies stay in this browser only.</span>
         </div>
-        <RiskStormBoard spec={westhavenC2} seeds={westhavenSeedRisks} />
+        <RiskStormBoard spec={westhavenC2} seeds={westhavenSeedRisks} diagramMaxHeight="var(--risk-diagram-max)" />
         <details className="small">
           <summary className="muted">Other ways to test an architecture on paper</summary>
           <ul className="bullets" style={{ marginTop: 8 }}>

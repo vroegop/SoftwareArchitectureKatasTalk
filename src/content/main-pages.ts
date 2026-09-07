@@ -439,7 +439,7 @@ export const mainPages: PageDef[] = [
       subtitle:
         'Public domain katas from the list Ted Neward started and Neal Ford maintains, lightly paraphrased and linked to the source. Pick one at random or choose one that fits the room.',
       bullets: [
-        'Random pick, or filter by tag and choose',
+        'Random pick, or choose one from the list',
         'The pick is remembered on the live pages',
         'Facilitator hints stay hidden behind a toggle',
       ],

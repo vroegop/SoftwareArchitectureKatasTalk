@@ -1,5 +1,6 @@
 import { useState } from 'react'
 import type { PageProps } from '../app/pageComponents'
+import { useAtEnd } from '../app/stepParams'
 import { useStepHandler } from '../app/steps'
 import { live, useLive } from '../app/stores/liveStore'
 import { debriefPrompts } from '../content/live'
@@ -7,7 +8,8 @@ import { PageShell } from '../components/shell/PageShell'
 
 export default function LiveDebriefPage({ page }: PageProps) {
   const state = useLive()
-  const [shown, setShown] = useState(1)
+  const atEnd = useAtEnd()
+  const [shown, setShown] = useState(atEnd ? debriefPrompts.length : 1)
   const [group, setGroup] = useState('')
   const [text, setText] = useState('')
   const pins = state.pins.filter((p) => p.group !== 'parked')

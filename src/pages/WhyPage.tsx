@@ -1,16 +1,15 @@
 import type { PageProps } from '../app/pageComponents'
 import { useCycleSteps } from '../app/steps'
-import { useSearchParamState } from '../app/useSearchParamState'
+import { useStepId } from '../app/stepParams'
 import { costRows, personas } from '../content/why'
 import { PageShell } from '../components/shell/PageShell'
 import { SegmentedControl } from '../components/widgets/SegmentedControl'
 
+const PERSONA_IDS: string[] = personas.map((p) => p.id)
+
 export default function WhyPage({ page }: PageProps) {
-  const [personaId, setPersona] = useSearchParamState('persona', personas[0].id)
-  const index = Math.max(
-    0,
-    personas.findIndex((p) => p.id === personaId),
-  )
+  const [personaId, setPersona] = useStepId('persona', PERSONA_IDS)
+  const index = Math.max(0, PERSONA_IDS.indexOf(personaId))
   const persona = personas[index]
   useCycleSteps(index, personas.length, (i) => setPersona(personas[i].id))
 

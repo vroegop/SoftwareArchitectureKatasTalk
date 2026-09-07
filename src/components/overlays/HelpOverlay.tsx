@@ -1,6 +1,7 @@
 import { KEY_BINDINGS } from '../../app/keyboard'
 import { site } from '../../content/site'
 import { useStore } from '../../app/stores/createStore'
+import { useLastKey } from '../../app/stores/keyStore'
 import { safeStorage } from '../../app/stores/safeStorage'
 import { setSetting, settingsStore, type ThemePreference } from '../../app/stores/settingsStore'
 import { ui } from '../../app/stores/uiStore'
@@ -8,10 +9,21 @@ import { Dialog } from './Dialog'
 
 export function HelpOverlay({ open }: { open: boolean }) {
   const settings = useStore(settingsStore)
+  const lastKey = useLastKey()
   return (
     <Dialog open={open} onClose={ui.closeOverlay} title="Keys and settings" className="dialog-help">
       <div className="help grid-2">
-        <section>
+        <section className="stack-sm">
+          <h3 className="eyebrow">Clicker test</h3>
+          <p className="key-tester">
+            {lastKey ? (
+              <>
+                Last key: <kbd>{lastKey.label}</kbd> <span className="muted">→ {lastKey.action}</span>
+              </>
+            ) : (
+              <span className="muted">Press a button on your clicker; the key it sends shows up here.</span>
+            )}
+          </p>
           <h3 className="eyebrow">Keys</h3>
           <table className="table keymap">
             <tbody>

@@ -1,5 +1,5 @@
 import type { PageProps } from '../app/pageComponents'
-import { useSearchParamNumber, useSearchParamState } from '../app/useSearchParamState'
+import { useStepId, useStepIndex } from '../app/stepParams'
 import { kataById } from '../content/katas'
 import { kataAnatomy, kataRules, kataTimeline, notAKata } from '../content/katas-intro'
 import { PageShell } from '../components/shell/PageShell'
@@ -9,7 +9,7 @@ import { Tabs } from '../components/widgets/Tabs'
 const sample = kataById['hot-diggety-dog']
 
 function Anatomy() {
-  const [step, setStep] = useSearchParamNumber('step', 0)
+  const [step, setStep] = useStepIndex('step', kataAnatomy.length)
   const active = kataAnatomy[Math.min(step, kataAnatomy.length - 1)]
   const cls = (id: string) => (active.id === id ? 'is-active' : 'is-inactive')
   return (
@@ -72,8 +72,10 @@ function Anatomy() {
   )
 }
 
+const TAB_IDS = ['anatomy', 'rules', 'origins'] as const
+
 export default function KatasPage({ page }: PageProps) {
-  const [tab, setTab] = useSearchParamState('tab', 'anatomy')
+  const [tab, setTab] = useStepId('tab', TAB_IDS)
   return (
     <PageShell page={page}>
       <Tabs

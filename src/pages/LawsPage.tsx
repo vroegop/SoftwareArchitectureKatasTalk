@@ -1,17 +1,16 @@
 import { useState } from 'react'
 import type { PageProps } from '../app/pageComponents'
 import { useCycleSteps } from '../app/steps'
-import { useSearchParamState } from '../app/useSearchParamState'
+import { useStepId } from '../app/stepParams'
 import { architectThinking, laws, tradeoffSliders } from '../content/laws'
 import { PageShell } from '../components/shell/PageShell'
 import { SegmentedControl } from '../components/widgets/SegmentedControl'
 
+const SLIDER_IDS = tradeoffSliders.map((s) => s.id)
+
 export default function LawsPage({ page }: PageProps) {
-  const [sliderId, setSliderId] = useSearchParamState('slider', tradeoffSliders[0].id)
-  const index = Math.max(
-    0,
-    tradeoffSliders.findIndex((s) => s.id === sliderId),
-  )
+  const [sliderId, setSliderId] = useStepId('slider', SLIDER_IDS)
+  const index = Math.max(0, SLIDER_IDS.indexOf(sliderId))
   const slider = tradeoffSliders[index]
   const [positions, setPositions] = useState<Record<string, number>>({})
   const value = positions[slider.id] ?? 50

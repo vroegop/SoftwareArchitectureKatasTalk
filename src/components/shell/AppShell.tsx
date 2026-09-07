@@ -22,7 +22,6 @@ export function AppShell() {
   const settings = useStore(settingsStore)
 
   useEffect(() => {
-    ui.setHeroCollapsed(false)
     ui.closeOverlay()
     window.scrollTo({ top: 0 })
   }, [location.pathname])

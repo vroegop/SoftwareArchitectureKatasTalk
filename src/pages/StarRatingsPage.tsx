@@ -1,4 +1,5 @@
 import type { PageProps } from '../app/pageComponents'
+import { useStepId } from '../app/stepParams'
 import { useSearchParamList, useSearchParamState } from '../app/useSearchParamState'
 import { characteristics } from '../content/characteristics'
 import { architectureStyles, styleById } from '../content/styles'
@@ -10,11 +11,12 @@ import { StarRating } from '../components/widgets/StarRating'
 import { Tabs } from '../components/widgets/Tabs'
 
 const characteristicIds = new Set(characteristics.map((c) => c.id as string))
+const VIEW_IDS = ['matrix', 'radar'] as const
 
 export default function StarRatingsPage({ page }: PageProps) {
   const [sortRaw, setSort] = useSearchParamState('sort', '')
   const [compare, setCompare] = useSearchParamList('compare')
-  const [view, setView] = useSearchParamState('view', 'matrix')
+  const [view, setView] = useStepId('view', VIEW_IDS)
   const sortBy = characteristicIds.has(sortRaw) ? (sortRaw as CharacteristicId) : null
   const selected = compare.filter((id) => id in styleById)
   const series = selected.map((id) => {

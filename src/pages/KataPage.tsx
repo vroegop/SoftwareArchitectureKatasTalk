@@ -12,9 +12,10 @@ export default function KataPage({ page }: PageProps) {
   const isPicked = state.kataId === kata.id
   return (
     <PageShell page={page}>
-      <div className="measure" style={{ maxWidth: '78ch' }}>
+      <div>
         <KataCard
           kata={kata}
+          compact
           showHints
           actions={
             <div className="btn-group">
