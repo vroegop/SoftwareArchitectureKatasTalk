@@ -1,6 +1,6 @@
 import type { PageProps } from '../app/pageComponents'
 import { useCycleSteps } from '../app/steps'
-import { useSearchParamState } from '../app/useSearchParamState'
+import { useStepId } from '../app/stepParams'
 import { conversations, vocabulary } from '../content/shared-language'
 import { PageShell } from '../components/shell/PageShell'
 import { SegmentedControl } from '../components/widgets/SegmentedControl'
@@ -11,12 +11,11 @@ function humanMinutes(minutes: number): string {
   return `${minutes} minutes`
 }
 
+const VARIANT_IDS: string[] = conversations.map((c) => c.id)
+
 export default function SharedLanguagePage({ page }: PageProps) {
-  const [variantId, setVariant] = useSearchParamState('variant', conversations[0].id)
-  const index = Math.max(
-    0,
-    conversations.findIndex((c) => c.id === variantId),
-  )
+  const [variantId, setVariant] = useStepId('variant', VARIANT_IDS)
+  const index = Math.max(0, VARIANT_IDS.indexOf(variantId))
   const variant = conversations[index]
   useCycleSteps(index, conversations.length, (i) => setVariant(conversations[i].id))
 

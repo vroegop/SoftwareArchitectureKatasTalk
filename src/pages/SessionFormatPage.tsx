@@ -1,5 +1,6 @@
 import type { PageProps } from '../app/pageComponents'
-import { useSearchParamNumber, useSearchParamState } from '../app/useSearchParamState'
+import { useStepId, useStepIndex } from '../app/stepParams'
+import { useSearchParamNumber } from '../app/useSearchParamState'
 import { timer } from '../app/stores/timerStore'
 import { facilitatorRole, feedbackRules, sessionPhases, whenToSkipFacilitator } from '../content/session'
 import { PageShell } from '../components/shell/PageShell'
@@ -11,7 +12,7 @@ const LENGTHS = [60, 90, 180]
 
 function Loop() {
   const [length, setLength] = useSearchParamNumber('length', 90)
-  const [step, setStep] = useSearchParamNumber('phase', 0)
+  const [step, setStep] = useStepIndex('phase', sessionPhases.length)
   const factor = length / 90
   const scaled = (minutes: number) => Math.max(1, Math.round(minutes * factor))
   const total = sessionPhases.reduce((sum, p) => sum + scaled(p.minutes), 0)
@@ -93,8 +94,10 @@ function Loop() {
   )
 }
 
+const TAB_IDS = ['loop', 'rules'] as const
+
 export default function SessionFormatPage({ page }: PageProps) {
-  const [tab, setTab] = useSearchParamState('tab', 'loop')
+  const [tab, setTab] = useStepId('tab', TAB_IDS)
   return (
     <PageShell page={page}>
       <Tabs

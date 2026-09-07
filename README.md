@@ -22,18 +22,25 @@ venue Wi-Fi. The QR code on the title and closing pages always points at the pub
 
 ## Present it
 
+A clicker only has forward and back, so both are step-aware. Forward first gives the stage the room it needs
+(the hero collapses to a title bar when the interactive part does not fit on the screen), then walks the page's
+steps (persona, tabs, reveals, phases), then moves to the next page. The nine style deep-dives are part of the
+walk after the gallery; the kata pages are not. Open the help panel (`?`) and press a clicker button to see
+which key it sends.
+
 | Key | Action |
 |---|---|
-| `→` `PgDn` / `←` `PgUp` | next / previous page on the current track |
-| `Space` | next step inside the page (stepper, tab, reveal), then next page; `Shift` reverses |
-| `↓` | dive into the deep-dive pages (styles under the gallery, katas under the library) |
+| `PgDn` `→` `Space` `Enter` | forward: room for the stage, next step, next page |
+| `PgUp` `←` `Backspace` | back: previous step, expand the hero, previous page in its final state |
+| `Shift + →` / `Shift + ←` | jump a whole page, ignoring steps |
+| `↓` | dive into the kata pages under the library |
 | `↑` `Esc` | back to the parent page, or close a panel |
 | `T` | table of contents with the run-of-show minutes |
 | `N` | speaker notes (a side drawer, hidden by default) |
 | `C` | round timer: presets for the C1 round, feedback, C2 round; keeps running across pages and reloads |
 | `H` | collapse the hero so the interactive part gets the whole stage |
 | `D` | theme: dark (projector), light (phones), system |
-| `F` / `B` / `?` | fullscreen / blank screen / key map and settings |
+| `F` `F5` / `B` `.` / `?` | fullscreen / blank screen / key map, clicker test and settings |
 
 Rehearsal bookmarks: widget state such as the selected persona, tab, matrix sort and compared styles lives in
 the URL (`/star-ratings?compare=microservices,event-driven&sort=scalability`).
@@ -67,7 +74,7 @@ theme-aware SVG.
 
 ```bash
 npm run check        # lint, typecheck, unit tests, build
-npm run e2e          # Playwright: keyboard walk, sub-tracks, overlays, timer and sticky persistence, deep links
+npm run e2e          # Playwright: keyboard and clicker walks, overlays, timer and sticky persistence, deep links, no-scroll fit at 1080p
 npm run screenshots  # every page at 1920×1080 dark and the main pages at phone size, light → e2e/screenshots/
 ```
 

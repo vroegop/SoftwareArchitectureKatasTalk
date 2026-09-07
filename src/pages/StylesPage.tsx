@@ -1,6 +1,5 @@
 import { Link } from 'react-router-dom'
 import type { PageProps } from '../app/pageComponents'
-import { useCycleSteps } from '../app/steps'
 import { useSearchParamList, useSearchParamState } from '../app/useSearchParamState'
 import { characteristics, characteristicById } from '../content/characteristics'
 import { architectureStyles, styleById } from '../content/styles'
@@ -32,10 +31,8 @@ function StyleCard({ style, selected, compared, onSelect }: { style: Architectur
 export default function StylesPage({ page }: PageProps) {
   const [selectedId, setSelected] = useSearchParamState('style', '')
   const [compare, setCompare] = useSearchParamList('compare')
-  const index = architectureStyles.findIndex((s) => s.id === selectedId)
-  const selected = index >= 0 ? architectureStyles[index] : undefined
+  const selected = architectureStyles.find((s) => s.id === selectedId)
   const compared = compare.filter((id) => id in styleById) as StyleId[]
-  useCycleSteps(index, architectureStyles.length, (i) => setSelected(architectureStyles[i].id))
 
   const families = [
     { id: 'monolithic', label: 'Monolithic: one deployment unit', styles: architectureStyles.filter((s) => s.family === 'monolithic') },
@@ -102,7 +99,7 @@ export default function StylesPage({ page }: PageProps) {
               </div>
             </div>
           ) : (
-            <p className="muted">Click a style, or press Space to walk through them. Add up to three to a comparison.</p>
+            <p className="muted">Click a style for a summary, add up to three to a comparison. Forward walks into the nine deep-dive pages.</p>
           )}
           {compared.length > 0 ? (
             <div className="card card-sm stack-sm">

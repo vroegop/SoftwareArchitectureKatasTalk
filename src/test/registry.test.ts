@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest'
-import { byId, mainTrack, neighbours, pageForPath, positionLabel, progressIndex, sectionGroups, subTrackOf } from '../app/registry'
+import { byId, mainTrack, neighbours, pageForPath, positionLabel, progressIndex, sectionGroups, subTrackOf, talkNext, talkOrder, talkPosition, talkPrev } from '../app/registry'
 
 describe('navigation lanes', () => {
   it('moves along the main track and skips sub pages', () => {
@@ -44,5 +44,26 @@ describe('navigation lanes', () => {
     const groups = sectionGroups()
     expect(groups.map((g) => g.id)).toEqual(['intro', 'method', 'thinking', 'styles', 'practice', 'live', 'wrapup'])
     expect(groups.flatMap((g) => g.pages)).toHaveLength(mainTrack.length)
+  })
+
+  it('walks the talk order with the nine style pages after the gallery', () => {
+    expect(talkOrder).toHaveLength(mainTrack.length + 9)
+    expect(talkNext('styles')?.id).toBe('style-layered')
+    expect(talkNext('style-layered')?.id).toBe('style-modular-monolith')
+    expect(talkNext('style-microservices')?.id).toBe('case-design')
+    expect(talkPrev('case-design')?.id).toBe('style-microservices')
+    expect(talkPrev('style-layered')?.id).toBe('styles')
+    expect(talkNext('closing')).toBeUndefined()
+    expect(talkPrev('title')).toBeUndefined()
+  })
+
+  it('keeps the kata pages off the talk order but connected to it', () => {
+    expect(talkOrder.some((p) => p.id.startsWith('kata-'))).toBe(false)
+    expect(talkNext('library')?.id).toBe('live-c1')
+    expect(talkNext('kata-going-going-gone')?.id).toBe('kata-check-your-work')
+    expect(talkNext('kata-wheres-fluffymon')?.id).toBe('live-c1')
+    expect(talkPrev('kata-going-going-gone')?.id).toBe('library')
+    expect(talkPosition('kata-sysop-squad').index).toBe(talkPosition('library').index)
+    expect(talkPosition('closing').index).toBe(talkOrder.length - 1)
   })
 })

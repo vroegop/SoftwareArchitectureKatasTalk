@@ -6,9 +6,11 @@ export interface UiState {
   overlay: OverlayId | null
   heroCollapsed: boolean
   blank: boolean
+  /** The current page's stage is taller than the room under the hero. */
+  stageOverflow: boolean
 }
 
-export const uiStore = createStore<UiState>({ overlay: null, heroCollapsed: false, blank: false })
+export const uiStore = createStore<UiState>({ overlay: null, heroCollapsed: false, blank: false, stageOverflow: false })
 
 export const ui = {
   openOverlay(id: OverlayId): void {
@@ -31,6 +33,9 @@ export const ui = {
   },
   toggleBlank(): void {
     uiStore.set((s) => ({ ...s, blank: !s.blank }))
+  },
+  setStageOverflow(stageOverflow: boolean): void {
+    uiStore.set((s) => (s.stageOverflow === stageOverflow ? s : { ...s, stageOverflow }))
   },
 }
 

@@ -1,5 +1,6 @@
 import { Link } from 'react-router-dom'
 import type { PageProps } from '../app/pageComponents'
+import { useStepId } from '../app/stepParams'
 import { useSearchParamState } from '../app/useSearchParamState'
 import { characteristicById } from '../content/characteristics'
 import { westhavenAdr, westhavenC2, westhavenChosenStyles, westhavenPicks, westhavenQuanta, westhavenShortlist, westhavenUndecided } from '../content/example'
@@ -114,8 +115,10 @@ function Decision() {
   )
 }
 
+const TAB_IDS = ['drivers', 'decision', 'adr', 'undecided'] as const
+
 export default function CaseDesignPage({ page }: PageProps) {
-  const [tab, setTab] = useSearchParamState('tab', 'drivers')
+  const [tab, setTab] = useStepId('tab', TAB_IDS)
   return (
     <PageShell page={page}>
       <Tabs

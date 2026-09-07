@@ -44,10 +44,13 @@
   grid-template-rows: auto minmax(0, 1fr);
   /* Diagrams size themselves to what is left of the stage under the hero. */
   --stage-diagram-max: max(340px, calc(100dvh - 520px));
+  /* The risk board also has the four-step strip and the score legend above it. */
+  --risk-diagram-max: max(300px, calc(100dvh - 720px));
 }
 
 .page.hero-collapsed {
   --stage-diagram-max: calc(100dvh - 190px);
+  --risk-diagram-max: calc(100dvh - 470px);
 }
 
 .hero {
@@ -78,31 +81,52 @@
   text-wrap: balance;
 }
 
-.hero-subtitle {
+.hero-detail {
   margin-top: var(--space-3);
+  display: grid;
+  gap: var(--space-3) var(--space-7);
+  align-items: start;
+}
+
+.hero-detail-2 {
+  grid-template-columns: minmax(0, 1.15fr) minmax(0, 1fr);
+}
+
+.hero-subtitle {
   font-size: var(--step-0);
   color: var(--fg-muted);
   max-width: 62ch;
   text-wrap: pretty;
 }
 
+.hero-side {
+  display: grid;
+  gap: var(--space-3);
+}
+
 .hero-bullets {
-  margin-top: var(--space-3);
   padding-left: 1.1em;
   font-size: var(--step--1);
   color: var(--fg);
+  max-width: 60ch;
+}
+
+.hero-bullets li {
+  margin-bottom: var(--space-1);
+}
+
+.hero-detail:not(.hero-detail-2) .hero-bullets {
   columns: 2;
   column-gap: var(--space-6);
   max-width: 80ch;
 }
 
-.hero-bullets li {
+.hero-detail:not(.hero-detail-2) .hero-bullets li {
   break-inside: avoid;
-  margin-bottom: var(--space-1);
 }
 
 .hero-quote {
-  margin: var(--space-3) 0 0;
+  margin: 0;
   padding-left: var(--space-4);
   border-left: 3px solid var(--accent);
   max-width: 70ch;
@@ -144,6 +168,11 @@
   background: var(--bg-elevated);
 }
 
+.hero-toggle.is-needed {
+  color: var(--accent);
+  background: var(--accent-soft);
+}
+
 .hero-collapsed .hero {
   padding: 8px clamp(20px, 5vw, 72px);
   gap: var(--space-4);
@@ -156,6 +185,8 @@
 .hero-collapsed .hero-title {
   font-size: var(--step-1);
   font-weight: 700;
+  max-width: none;
+  text-wrap: pretty;
 }
 
 .hero-collapsed .hero-aside {
@@ -487,6 +518,13 @@
 }
 
 /* -------------------------------------------------------------- help */
+.key-tester {
+  padding: var(--space-3) var(--space-4);
+  border-radius: var(--radius-sm);
+  background: var(--bg-sunken);
+  font-size: var(--step-0);
+}
+
 .keymap td:first-child {
   white-space: nowrap;
   width: 1%;
@@ -575,7 +613,11 @@
     justify-self: start;
   }
 
-  .hero-bullets {
+  .hero-detail-2 {
+    grid-template-columns: 1fr;
+  }
+
+  .hero-detail:not(.hero-detail-2) .hero-bullets {
     columns: 1;
   }
 
@@ -587,6 +629,7 @@
   .page,
   .page.hero-collapsed {
     --stage-diagram-max: none;
+    --risk-diagram-max: none;
   }
 
   .stage-split,

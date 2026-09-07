@@ -44,6 +44,43 @@ export function neighbours(id: string): Neighbours {
   }
 }
 
+/**
+ * The order the talk is presented in: the main track with the nine style
+ * deep-dives spliced in after the gallery. Kata pages stay off this order.
+ */
+export const talkOrder: PageDef[] = mainTrack.flatMap((p) => (p.id === 'styles' ? [p, ...subTrackOf('styles')] : [p]))
+const talkIndexById = new Map(talkOrder.map((p, i) => [p.id, i]))
+
+/** Next page for a forward click: along the talk order, or along an off-track lane and then onwards. */
+export function talkNext(id: string): PageDef | undefined {
+  const page = byId[id]
+  if (!page) return undefined
+  const i = talkIndexById.get(id)
+  if (i !== undefined) return talkOrder[i + 1]
+  const lane = subTrackOf(page.parent ?? '')
+  const j = lane.indexOf(page)
+  return lane[j + 1] ?? (page.parent ? talkNext(page.parent) : undefined)
+}
+
+/** Previous page for a back click; off-track lanes return to their parent first. */
+export function talkPrev(id: string): PageDef | undefined {
+  const page = byId[id]
+  if (!page) return undefined
+  const i = talkIndexById.get(id)
+  if (i !== undefined) return talkOrder[i - 1]
+  const lane = subTrackOf(page.parent ?? '')
+  const j = lane.indexOf(page)
+  return lane[j - 1] ?? (page.parent ? byId[page.parent] : undefined)
+}
+
+/** Position in the talk order (0-based); off-track pages report their parent's position. */
+export function talkPosition(id: string): { index: number; total: number } {
+  const page = byId[id]
+  const own = page ? talkIndexById.get(page.id) : undefined
+  const parent = page?.parent ? talkIndexById.get(page.parent) : undefined
+  return { index: own ?? parent ?? 0, total: talkOrder.length }
+}
+
 /** 0-based index on the main track of a page or of its parent. */
 export function progressIndex(id: string): number {
   const page = byId[id]

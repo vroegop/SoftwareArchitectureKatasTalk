@@ -1,9 +1,10 @@
 import { useEffect } from 'react'
 import { useNavigate } from 'react-router-dom'
 import type { PageDef } from '../content/types'
-import { isButtonLike, isEditableTarget, isLocalKeysTarget } from './keyboard'
-import { mainTrack, neighbours, pageForPath } from './registry'
+import { BACK_KEYS, describeAction, describeKey, FORWARD_KEYS, isButtonLike, isEditableTarget, isLocalKeysTarget } from './keyboard'
+import { mainTrack, neighbours, pageForPath, talkNext, talkPrev } from './registry'
 import { stepNext, stepPrev } from './steps'
+import { recordKey } from './stores/keyStore'
 import { cycleTheme, toggleNotes } from './stores/settingsStore'
 import { ui, uiStore } from './stores/uiStore'
 
@@ -16,7 +17,6 @@ export function toggleFullscreen(): void {
   }
 }
 
-/** One global keydown listener implementing the presenter key map. */
 const basename = import.meta.env.BASE_URL.replace(/\/$/, '')
 
 /** Current page read from the URL at keydown time, so rapid key presses never see a stale page. */
@@ -26,15 +26,21 @@ function currentPage(): PageDef | undefined {
   return pageForPath(relative || '/')
 }
 
+/**
+ * One global keydown listener implementing the presenter key map. A clicker
+ * only has forward and back, so both are step-aware: forward first gives the
+ * stage the room it needs, then advances the page's steps, then moves on.
+ */
 export function useKeyboardNav(): void {
   const navigate = useNavigate()
 
   useEffect(() => {
     function onKey(e: KeyboardEvent): void {
       if (e.metaKey || e.ctrlKey || e.altKey) return
+      recordKey(describeKey(e), describeAction(e))
       if (e.repeat && e.key !== 'ArrowRight' && e.key !== 'ArrowLeft') return
 
-      const { overlay, blank } = uiStore.get()
+      const { overlay, blank, heroCollapsed, stageOverflow } = uiStore.get()
       if (blank) {
         ui.setBlank(false)
         e.preventDefault()
@@ -51,36 +57,53 @@ export function useKeyboardNav(): void {
 
       const page = currentPage()
       if (!page) return
-      const n = neighbours(page.id)
-      const go = (target?: PageDef): void => {
+      const go = (target?: PageDef, search = ''): void => {
         if (!target) return
-        navigate(target.path)
+        navigate({ pathname: target.path, search })
         e.preventDefault()
       }
 
+      const isBack = BACK_KEYS.has(e.key) || (e.key === ' ' && e.shiftKey)
+      const isForward = !isBack && FORWARD_KEYS.has(e.key)
+
+      if (isForward) {
+        if ((e.key === ' ' || e.key === 'Enter') && isButtonLike(e.target)) return
+        if (e.shiftKey && e.key === 'ArrowRight') {
+          go(talkNext(page.id))
+          return
+        }
+        e.preventDefault()
+        if (!heroCollapsed && stageOverflow) {
+          ui.setHeroCollapsed(true)
+          return
+        }
+        if (stepNext()) return
+        go(talkNext(page.id))
+        return
+      }
+
+      if (isBack) {
+        if (e.key === 'Backspace' && isButtonLike(e.target)) return
+        if (e.shiftKey && e.key === 'ArrowLeft') {
+          go(talkPrev(page.id))
+          return
+        }
+        e.preventDefault()
+        if (stepPrev()) return
+        if (heroCollapsed) {
+          ui.setHeroCollapsed(false)
+          return
+        }
+        go(talkPrev(page.id), '?at=end')
+        return
+      }
+
+      const n = neighbours(page.id)
       switch (e.key) {
-        case 'ArrowRight':
-        case 'PageDown':
-          go(n.next)
-          break
-        case 'ArrowLeft':
-        case 'PageUp':
-          go(n.prev)
-          break
-        case ' ':
-          if (isButtonLike(e.target)) return
-          if (e.shiftKey ? stepPrev() : stepNext()) {
-            e.preventDefault()
-            break
-          }
-          go(e.shiftKey ? n.prev : n.next)
-          break
         case 'ArrowDown':
           go(n.down)
           break
         case 'ArrowUp':
-          go(n.up)
-          break
         case 'Escape':
           go(n.up)
           break
@@ -112,10 +135,13 @@ export function useKeyboardNav(): void {
           break
         case 'f':
         case 'F':
+        case 'F5':
+          e.preventDefault()
           toggleFullscreen()
           break
         case 'b':
         case 'B':
+        case '.':
           ui.toggleBlank()
           break
         case '?':

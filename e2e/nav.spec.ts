@@ -2,39 +2,74 @@ import { expect, test, type Page } from '@playwright/test'
 import { pages } from '../src/content/pages'
 
 const mainTrack = pages.filter((p) => p.track === 'main')
+/** The presentation order: main pages with the nine style pages after the gallery. */
+const talkOrder = mainTrack.flatMap((p) => (p.id === 'styles' ? [p, ...pages.filter((s) => s.parent === 'styles')] : [p]))
 const base = '/SoftwareArchitectureKatasTalk'
 
 function pathOf(page: Page): string {
   return new URL(page.url()).pathname.replace(base, '') || '/'
 }
 
-test('walks the whole main track with the arrow keys without console errors', async ({ page }) => {
+test('jumps through the whole talk order with Shift + arrow without console errors', async ({ page }) => {
   const errors: string[] = []
   page.on('pageerror', (e) => errors.push(e.message))
   page.on('console', (m) => {
     if (m.type() === 'error') errors.push(m.text())
   })
   await page.goto('./')
-  for (let i = 0; i < mainTrack.length; i += 1) {
-    const expected = mainTrack[i]
+  for (let i = 0; i < talkOrder.length; i += 1) {
+    const expected = talkOrder[i]
     await expect(page.locator('h1')).toHaveText(expected.hero.title)
     expect(pathOf(page)).toBe(expected.path)
-    if (i < mainTrack.length - 1) await page.keyboard.press('ArrowRight')
+    if (i < talkOrder.length - 1) await page.keyboard.press('Shift+ArrowRight')
   }
-  await page.keyboard.press('ArrowRight')
-  expect(pathOf(page)).toBe(mainTrack[mainTrack.length - 1].path)
+  await page.keyboard.press('Shift+ArrowRight')
+  expect(pathOf(page)).toBe(talkOrder[talkOrder.length - 1].path)
   expect(errors).toEqual([])
 })
 
-test('dives into the style sub-track and climbs back out', async ({ page }) => {
+test('a clicker walks every page and its steps with forward only', async ({ page }) => {
+  test.setTimeout(5 * 60_000)
+  await page.goto('./')
+  let presses = 0
+  for (let i = 0; i < talkOrder.length - 1; i += 1) {
+    expect(pathOf(page), `before page ${i}`).toBe(talkOrder[i].path)
+    let moved = false
+    for (let k = 0; k < 40 && !moved; k += 1) {
+      await page.keyboard.press('PageDown')
+      presses += 1
+      moved = pathOf(page) !== talkOrder[i].path
+    }
+    expect(moved, `stuck on ${talkOrder[i].id} after 40 presses`).toBe(true)
+    expect(pathOf(page)).toBe(talkOrder[i + 1].path)
+  }
+  await page.keyboard.press('PageDown')
+  expect(pathOf(page)).toBe(talkOrder[talkOrder.length - 1].path)
+  expect(presses).toBeGreaterThan(talkOrder.length)
+  expect(presses).toBeLessThan(400)
+})
+
+test('back returns to the previous page in its final state', async ({ page }) => {
+  await page.goto('./c4')
+  await page.keyboard.press('PageUp')
+  expect(pathOf(page)).toBe('/case')
+  expect(new URL(page.url()).searchParams.get('at')).toBe('end')
+  await expect(page.locator('.qa-item.is-revealed')).toHaveCount(10)
+  await expect(page.locator('.qa-item.is-open')).toHaveCount(1)
+  await page.keyboard.press('PageUp')
+  await expect(page.locator('.qa-item.is-revealed')).toHaveCount(9)
+})
+
+test('dives into the style pages and climbs back out', async ({ page }) => {
   await page.goto('./styles')
   await page.keyboard.press('ArrowDown')
   expect(pathOf(page)).toBe('/styles/layered')
-  for (let i = 0; i < 8; i += 1) await page.keyboard.press('ArrowRight')
-  expect(pathOf(page)).toBe('/styles/microservices')
-  await page.keyboard.press('ArrowRight')
+  for (let i = 0; i < 8; i += 1) await page.keyboard.press('Shift+ArrowRight')
   expect(pathOf(page)).toBe('/styles/microservices')
   await expect(page.locator('h1')).toHaveText('Microservices')
+  await page.keyboard.press('Shift+ArrowRight')
+  expect(pathOf(page)).toBe('/case-design')
+  await page.goto('./styles/pipeline')
   await page.keyboard.press('Escape')
   expect(pathOf(page)).toBe('/styles')
 })
