@@ -1,0 +1,87 @@
+/* Design tokens. Dark is the projector default; light is for phones and print. */
+:root {
+  color-scheme: dark;
+  --bg: #0f1420;
+  --bg-elevated: #171f30;
+  --bg-sunken: #0a0e17;
+  --bg-overlay: rgba(10, 14, 23, 0.88);
+  --fg: #f2f4f8;
+  --fg-muted: #a9b3c4;
+  --fg-faint: #78849a;
+  --accent: #f5a524;
+  --accent-strong: #ffbf57;
+  --accent-contrast: #14181f;
+  --accent-soft: rgba(245, 165, 36, 0.14);
+  --line: #2b3448;
+  --line-strong: #435068;
+  --diagram-fill: #1a2335;
+  --diagram-fill-alt: #253149;
+  --diagram-fill-external: #131a29;
+  --diagram-stroke: #9aacca;
+  --diagram-edge: #c3cddf;
+  --diagram-text: #f2f4f8;
+  --diagram-muted: #5b6980;
+  --risk-low: #2f9e6b;
+  --risk-medium: #e0a020;
+  --risk-high: #e04e4e;
+  --ok: #3fbf7f;
+  --warn: #e0a020;
+  --danger: #e05252;
+  --radius: 14px;
+  --radius-sm: 8px;
+  --space-1: 4px;
+  --space-2: 8px;
+  --space-3: 12px;
+  --space-4: 16px;
+  --space-5: 24px;
+  --space-6: 32px;
+  --space-7: 48px;
+  --shadow: 0 14px 40px rgba(0, 0, 0, 0.4);
+  --motion: 1;
+  --font: system-ui, -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+  --font-mono: ui-monospace, SFMono-Regular, Menlo, Consolas, 'Liberation Mono', monospace;
+  --step-hero: clamp(1.9rem, 3.7vw, 3.5rem);
+  --step-2: clamp(1.45rem, 2.4vw, 2.2rem);
+  --step-1: clamp(1.15rem, 1.6vw, 1.5rem);
+  --step-0: clamp(1rem, 1.2vw, 1.25rem);
+  --step--1: clamp(0.88rem, 1vw, 1.02rem);
+  --step--2: clamp(0.78rem, 0.9vw, 0.9rem);
+  --measure: 62ch;
+}
+
+[data-theme='light'] {
+  color-scheme: light;
+  --bg: #f7f5f0;
+  --bg-elevated: #ffffff;
+  --bg-sunken: #ebe7de;
+  --bg-overlay: rgba(247, 245, 240, 0.92);
+  --fg: #171a21;
+  --fg-muted: #4a5468;
+  --fg-faint: #7a8496;
+  --accent: #b45309;
+  --accent-strong: #8f3f06;
+  --accent-contrast: #ffffff;
+  --accent-soft: rgba(180, 83, 9, 0.12);
+  --line: #d9d3c6;
+  --line-strong: #b8b0a0;
+  --diagram-fill: #ffffff;
+  --diagram-fill-alt: #f0ece2;
+  --diagram-fill-external: #ebe7de;
+  --diagram-stroke: #4a5468;
+  --diagram-edge: #3a4354;
+  --diagram-text: #171a21;
+  --diagram-muted: #9aa3b2;
+  --risk-low: #1f8a55;
+  --risk-medium: #b7791f;
+  --risk-high: #c03535;
+  --ok: #1f8a55;
+  --warn: #b7791f;
+  --danger: #c03535;
+  --shadow: 0 14px 40px rgba(0, 0, 0, 0.1);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  :root {
+    --motion: 0;
+  }
+}
