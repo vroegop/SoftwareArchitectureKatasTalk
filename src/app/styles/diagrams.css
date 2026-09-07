@@ -1,0 +1,327 @@
+.dg {
+  margin: 0;
+  display: grid;
+  gap: var(--space-2);
+  min-width: 0;
+}
+
+.dg-title {
+  font-size: var(--step--1);
+  font-weight: 700;
+  color: var(--fg);
+}
+
+.dg-svg {
+  width: 100%;
+  height: auto;
+  display: block;
+  font-family: var(--font);
+}
+
+.dg-shape {
+  fill: var(--diagram-fill);
+  stroke: var(--diagram-stroke);
+  stroke-width: 2;
+  transition: opacity calc(var(--motion) * 150ms) ease;
+}
+
+.dg-shape-detail {
+  fill: none;
+  stroke: var(--diagram-stroke);
+  stroke-width: 1.5;
+  opacity: 0.7;
+}
+
+.dg-shape-dot {
+  fill: var(--diagram-stroke);
+  opacity: 0.7;
+}
+
+.dg-kind-component .dg-shape-detail {
+  fill: var(--diagram-stroke);
+  stroke: none;
+}
+
+.dg-kind-person .dg-shape {
+  fill: var(--diagram-fill-alt);
+}
+
+.dg-kind-person .dg-head {
+  fill: var(--diagram-fill-alt);
+}
+
+.dg-kind-system .dg-shape,
+.dg-kind-core .dg-shape {
+  stroke-width: 2.5;
+}
+
+.dg-kind-system.is-emphasis .dg-shape,
+.is-emphasis .dg-shape {
+  stroke: var(--accent);
+  stroke-width: 3;
+}
+
+.dg-kind-external .dg-shape {
+  fill: var(--diagram-fill-external);
+  stroke: var(--diagram-muted);
+}
+
+.dg-kind-external .dg-text {
+  fill: var(--fg-muted);
+}
+
+.dg-kind-boundary .dg-shape,
+.dg-kind-space .dg-shape {
+  fill: transparent;
+  stroke-dasharray: 8 6;
+  stroke: var(--diagram-muted);
+}
+
+.dg-kind-space .dg-shape {
+  fill: var(--diagram-fill-alt);
+  fill-opacity: 0.35;
+}
+
+.dg-kind-layer .dg-shape {
+  fill: var(--diagram-fill-alt);
+}
+
+.dg-kind-database .dg-lid {
+  fill: var(--diagram-fill-alt);
+}
+
+.dg-kind-queue .dg-shape {
+  fill: var(--diagram-fill-alt);
+}
+
+.dg-kind-note .dg-shape {
+  fill: var(--accent-soft);
+  stroke: var(--accent);
+  stroke-width: 1.5;
+}
+
+.dg-kind-note .dg-text {
+  font-style: italic;
+  fill: var(--fg-muted);
+}
+
+.dg-kind-plugin .dg-shape {
+  fill: var(--diagram-fill-alt);
+}
+
+.dg-kind-gateway .dg-shape {
+  fill: var(--diagram-fill-alt);
+}
+
+.dg-kind-filter .dg-shape {
+  fill: var(--diagram-fill-alt);
+}
+
+.is-muted .dg-shape {
+  stroke-dasharray: 6 5;
+  opacity: 0.75;
+}
+
+.dg-text {
+  fill: var(--diagram-text);
+  pointer-events: none;
+}
+
+.dg-label {
+  font-weight: 700;
+}
+
+.dg-tech {
+  fill: var(--fg-muted);
+}
+
+.dg-desc {
+  fill: var(--fg-muted);
+}
+
+.dg-boundary-label {
+  font-weight: 700;
+  fill: var(--fg-muted);
+}
+
+.dg-edge-line {
+  fill: none;
+  stroke: var(--diagram-edge);
+  stroke-width: 2;
+}
+
+.dg-edge.is-dashed .dg-edge-line {
+  stroke-dasharray: 7 6;
+}
+
+.dg-edge-hit {
+  fill: none;
+  stroke: transparent;
+  stroke-width: 18;
+}
+
+.dg-arrowhead {
+  fill: var(--diagram-edge);
+}
+
+.dg-halo {
+  fill: var(--bg);
+  stroke: none;
+  opacity: 0.92;
+}
+
+.dg-edge-label {
+  fill: var(--fg);
+}
+
+.dg-edge-tech {
+  fill: var(--fg-muted);
+}
+
+.is-dim {
+  opacity: 0.18;
+}
+
+.is-highlight .dg-shape,
+.is-highlight .dg-edge-line {
+  stroke: var(--accent);
+  stroke-width: 3.5;
+}
+
+.is-highlight .dg-arrowhead {
+  fill: var(--accent);
+}
+
+.is-selected .dg-shape {
+  stroke: var(--accent);
+  stroke-width: 4;
+  filter: drop-shadow(0 0 6px var(--accent));
+}
+
+.is-selected .dg-edge-line {
+  stroke: var(--accent);
+  stroke-width: 4;
+}
+
+.dg-node.is-interactive,
+.dg-edge.is-interactive {
+  cursor: pointer;
+}
+
+.dg-node.is-interactive:hover .dg-shape {
+  stroke: var(--accent);
+}
+
+.dg-edge.is-interactive:hover .dg-edge-line {
+  stroke: var(--accent);
+  stroke-width: 3;
+}
+
+.dg-node.is-interactive:focus-visible {
+  outline: none;
+}
+
+.dg-node.is-interactive:focus-visible .dg-shape,
+.dg-edge.is-interactive:focus-visible .dg-edge-line {
+  stroke: var(--accent);
+  stroke-width: 4;
+}
+
+/* legend */
+.dg-legend {
+  list-style: none;
+  padding: 0;
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-2) var(--space-4);
+  font-size: var(--step--2);
+  color: var(--fg-muted);
+}
+
+.dg-legend li {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.dg-swatch {
+  display: inline-block;
+  width: 18px;
+  height: 12px;
+  border-radius: 3px;
+  border: 2px solid var(--diagram-stroke);
+  background: var(--diagram-fill);
+}
+
+.dg-swatch.dg-kind-person {
+  border-radius: 6px 6px 3px 3px;
+  background: var(--diagram-fill-alt);
+}
+
+.dg-swatch.dg-kind-external {
+  background: var(--diagram-fill-external);
+  border-color: var(--diagram-muted);
+}
+
+.dg-swatch.dg-kind-boundary,
+.dg-swatch.dg-kind-space {
+  background: transparent;
+  border-style: dashed;
+  border-color: var(--diagram-muted);
+}
+
+.dg-swatch.dg-kind-system {
+  border-color: var(--accent);
+}
+
+.dg-swatch.dg-kind-database {
+  border-radius: 50% / 30%;
+  background: var(--diagram-fill-alt);
+}
+
+.dg-swatch.dg-kind-queue,
+.dg-swatch.dg-kind-plugin,
+.dg-swatch.dg-kind-gateway,
+.dg-swatch.dg-kind-layer,
+.dg-swatch.dg-kind-filter {
+  background: var(--diagram-fill-alt);
+}
+
+.dg-swatch.dg-kind-note {
+  background: var(--accent-soft);
+  border-color: var(--accent);
+}
+
+/* risk stickies drawn in the overlay slot */
+.risk-sticky {
+  cursor: pointer;
+}
+
+.risk-sticky rect {
+  stroke: rgba(0, 0, 0, 0.25);
+  stroke-width: 1;
+}
+
+.risk-sticky text {
+  fill: #14181f;
+  font-weight: 800;
+  font-size: 14px;
+  pointer-events: none;
+}
+
+.risk-sticky.risk-low rect {
+  fill: var(--risk-low);
+}
+
+.risk-sticky.risk-medium rect {
+  fill: var(--risk-medium);
+}
+
+.risk-sticky.risk-high rect {
+  fill: var(--risk-high);
+}
+
+.risk-sticky.risk-low text,
+.risk-sticky.risk-high text {
+  fill: #fff;
+}

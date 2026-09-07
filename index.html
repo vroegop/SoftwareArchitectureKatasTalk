@@ -1,0 +1,36 @@
+<!doctype html>
+<html lang="en" data-theme="dark">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+    <meta name="color-scheme" content="dark light" />
+    <meta
+      name="description"
+      content="Architecture is a team sport: practising software architecture with Architectural Katas and C4 diagram rounds. An interactive presentation."
+    />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <title>Architecture is a team sport · Architectural Katas + C4</title>
+    <script>
+      // Resolve the theme before first paint to avoid a flash. Dark is the
+      // projector default; "system" follows the OS preference.
+      ;(function () {
+        var theme = 'dark'
+        try {
+          var raw = localStorage.getItem('akc4.settings')
+          var settings = raw ? JSON.parse(raw) : null
+          var pref = settings && settings.theme
+          if (pref === 'light' || pref === 'dark') theme = pref
+          else if (pref === 'system')
+            theme = window.matchMedia('(prefers-color-scheme: light)').matches ? 'light' : 'dark'
+        } catch (e) {
+          /* storage unavailable: keep the dark default */
+        }
+        document.documentElement.dataset.theme = theme
+      })()
+    </script>
+  </head>
+  <body>
+    <div id="root"></div>
+    <script type="module" src="/src/main.tsx"></script>
+  </body>
+</html>

@@ -1,0 +1,494 @@
+/* ------------------------------------------------------------- stars */
+.stars-sm svg {
+  width: 0.8em;
+  height: 0.8em;
+}
+
+.stars-lg svg {
+  width: 1.4em;
+  height: 1.4em;
+}
+
+/* ------------------------------------------------------------- radar */
+.radar {
+  margin: 0;
+  display: grid;
+  gap: var(--space-2);
+  justify-items: center;
+}
+
+.radar-svg {
+  width: 100%;
+  max-width: 520px;
+  height: auto;
+  font-family: var(--font);
+}
+
+.radar-ring {
+  fill: none;
+  stroke: var(--line);
+  stroke-width: 1;
+}
+
+.radar-ring-outer {
+  stroke: var(--line-strong);
+}
+
+.radar-axis {
+  stroke: var(--line);
+  stroke-width: 1;
+}
+
+.radar-axis-label {
+  fill: var(--fg-muted);
+  font-size: 13px;
+  font-weight: 600;
+}
+
+.radar-area {
+  fill: none;
+  stroke-width: 2.5;
+  stroke-linejoin: round;
+}
+
+.radar-primary .radar-area {
+  stroke: var(--accent);
+  fill: var(--accent);
+  fill-opacity: 0.12;
+}
+
+.radar-primary .radar-marker {
+  fill: var(--accent);
+}
+
+.radar-secondary .radar-area {
+  stroke: var(--fg);
+  stroke-dasharray: 8 5;
+}
+
+.radar-secondary .radar-marker {
+  fill: var(--fg);
+}
+
+.radar-tertiary .radar-area {
+  stroke: var(--fg-muted);
+  stroke-dasharray: 2 5;
+  stroke-linecap: round;
+}
+
+.radar-tertiary .radar-marker {
+  fill: var(--fg-muted);
+}
+
+.radar-reference .radar-area {
+  stroke: var(--fg-faint);
+  stroke-dasharray: 3 4;
+  stroke-width: 1.5;
+}
+
+.radar-legend {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-2) var(--space-4);
+  font-size: var(--step--1);
+}
+
+.radar-legend-item {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+}
+
+/* ------------------------------------------------------------ matrix */
+.matrix-wrap {
+  max-height: 100%;
+}
+
+.matrix th,
+.matrix td {
+  white-space: nowrap;
+  text-align: center;
+  padding: 0.35em 0.45em;
+}
+
+.matrix th.matrix-style,
+.matrix td.matrix-style {
+  text-align: left;
+  position: sticky;
+  left: 0;
+  background: var(--bg);
+  z-index: 1;
+}
+
+.matrix tbody th.matrix-style {
+  font-weight: 600;
+  font-size: var(--step--1);
+  text-transform: none;
+  letter-spacing: 0;
+  color: var(--fg);
+}
+
+.matrix-pick {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  color: var(--fg);
+  font-size: var(--step--1);
+}
+
+.matrix-pick a {
+  color: var(--fg);
+}
+
+.matrix-sort {
+  border: 0;
+  background: transparent;
+  color: inherit;
+  font: inherit;
+  cursor: pointer;
+  padding: 2px 4px;
+  border-radius: 4px;
+}
+
+.matrix-sort:hover {
+  color: var(--accent);
+}
+
+.matrix th.is-sorted,
+.matrix td.is-sorted {
+  background: var(--accent-soft);
+}
+
+.matrix tr.is-selected th,
+.matrix tr.is-selected td {
+  background: var(--bg-elevated);
+}
+
+.matrix tr.is-selected th.matrix-style {
+  box-shadow: inset 3px 0 0 var(--accent);
+}
+
+/* ----------------------------------------------------------- stepper */
+.stepper {
+  display: grid;
+  gap: var(--space-4);
+}
+
+.stepper-steps {
+  list-style: none;
+  padding: 0;
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-2);
+}
+
+.stepper-step {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 0.4em 0.8em;
+  border: 1px solid var(--line);
+  border-radius: 999px;
+  background: var(--bg-elevated);
+  color: var(--fg-muted);
+  font-size: var(--step--1);
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.stepper-step:hover {
+  border-color: var(--accent);
+  color: var(--fg);
+}
+
+.stepper-step.is-done {
+  color: var(--fg);
+}
+
+.stepper-step.is-active {
+  background: var(--accent);
+  border-color: var(--accent);
+  color: var(--accent-contrast);
+}
+
+.stepper-num {
+  display: inline-grid;
+  place-items: center;
+  width: 1.6em;
+  height: 1.6em;
+  border-radius: 50%;
+  background: var(--bg-sunken);
+  color: var(--fg);
+  font-size: 0.8em;
+}
+
+.is-active .stepper-num {
+  background: var(--accent-contrast);
+  color: var(--accent);
+}
+
+.stepper-panel {
+  min-height: 120px;
+}
+
+.stepper-compact .stepper-nav {
+  display: none;
+}
+
+/* --------------------------------------------------------- segmented */
+.segmented {
+  display: inline-flex;
+  flex-wrap: wrap;
+  border: 1px solid var(--line-strong);
+  border-radius: 999px;
+  padding: 3px;
+  background: var(--bg-sunken);
+  gap: 2px;
+}
+
+.segmented-option {
+  border: 0;
+  border-radius: 999px;
+  padding: 0.4em 0.9em;
+  background: transparent;
+  color: var(--fg-muted);
+  font-size: var(--step--1);
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.segmented-lg .segmented-option {
+  font-size: var(--step-0);
+  padding: 0.5em 1.1em;
+}
+
+.segmented-option:hover {
+  color: var(--fg);
+}
+
+.segmented-option[aria-pressed='true'] {
+  background: var(--accent);
+  color: var(--accent-contrast);
+}
+
+/* --------------------------------------------------------- checklist */
+.checklist-box {
+  display: grid;
+  gap: var(--space-3);
+}
+
+.checklist li {
+  padding: 0.35em 0;
+  border-bottom: 1px solid var(--line);
+}
+
+.checklist label {
+  display: grid;
+  grid-template-columns: auto 1fr;
+  gap: 4px 12px;
+  align-items: start;
+  color: var(--fg);
+  font-size: var(--step-0);
+  cursor: pointer;
+}
+
+.checklist input {
+  margin-top: 0.35em;
+  width: 1.1em;
+  height: 1.1em;
+  accent-color: var(--accent);
+}
+
+.checklist-hint {
+  grid-column: 2;
+  font-size: var(--step--1);
+}
+
+.checklist li.is-done .checklist-label {
+  text-decoration: line-through;
+  color: var(--fg-muted);
+}
+
+.checklist-big label {
+  font-size: var(--step-1);
+}
+
+/* --------------------------------------------------------- kata card */
+.kata-card {
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  background: var(--bg-elevated);
+  padding: var(--space-5);
+  display: grid;
+  gap: var(--space-4);
+}
+
+.kata-head {
+  display: flex;
+  justify-content: space-between;
+  gap: var(--space-4);
+  align-items: flex-start;
+}
+
+.kata-title {
+  font-size: var(--step-2);
+  font-weight: 800;
+  letter-spacing: -0.01em;
+}
+
+.kata-summary {
+  font-size: var(--step-0);
+}
+
+.kata-body {
+  display: grid;
+  gap: var(--space-3);
+  margin: 0;
+}
+
+.kata-body dt {
+  font-size: var(--step--2);
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--accent);
+  margin-bottom: 4px;
+}
+
+.kata-body dd {
+  margin: 0;
+}
+
+.kata-card-compact .kata-body {
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 240px), 1fr));
+}
+
+.kata-foot {
+  display: grid;
+  gap: var(--space-2);
+}
+
+.kata-hints summary {
+  cursor: pointer;
+  color: var(--fg-muted);
+  font-size: var(--step--1);
+}
+
+/* ------------------------------------------------------------ picker */
+.picker {
+  display: grid;
+  gap: var(--space-3);
+  justify-items: start;
+}
+
+.picker-choose summary {
+  list-style: none;
+  cursor: pointer;
+}
+
+.picker-choose summary::-webkit-details-marker {
+  display: none;
+}
+
+.picker-list {
+  list-style: none;
+  padding: 0;
+  margin-top: var(--space-2);
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-2);
+}
+
+/* ---------------------------------------------------------------- qr */
+.qr {
+  margin: 0;
+  display: grid;
+  justify-items: center;
+  gap: var(--space-2);
+}
+
+.qr-card {
+  padding: 8px;
+  background: #fff;
+  border-radius: 12px;
+  line-height: 0;
+}
+
+.qr-caption {
+  display: grid;
+  justify-items: center;
+  gap: 2px;
+  font-size: var(--step--1);
+  color: var(--fg-muted);
+  text-align: center;
+}
+
+/* --------------------------------------------------------------- adr */
+.adr {
+  display: grid;
+  gap: var(--space-4);
+}
+
+.adr-grid {
+  display: grid;
+  gap: var(--space-4) var(--space-6);
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 280px), 1fr));
+}
+
+.adr-grid h4 {
+  margin-bottom: var(--space-2);
+}
+
+/* -------------------------------------------------------------- risk */
+.risk-board {
+  align-items: start;
+}
+
+.risk-form {
+  border-color: var(--accent);
+}
+
+.risk-levels {
+  display: grid;
+  grid-template-columns: auto 1fr;
+  gap: var(--space-2) var(--space-3);
+  align-items: center;
+}
+
+.risk-chip-low {
+  background: var(--risk-low);
+  border-color: transparent;
+  color: #fff;
+}
+
+.risk-chip-medium {
+  background: var(--risk-medium);
+  border-color: transparent;
+  color: #14181f;
+}
+
+.risk-chip-high {
+  background: var(--risk-high);
+  border-color: transparent;
+  color: #fff;
+}
+
+.risk-register td {
+  vertical-align: middle;
+}
+
+.link-button {
+  border: 0;
+  background: transparent;
+  color: var(--fg);
+  text-decoration: underline;
+  text-underline-offset: 0.15em;
+  cursor: pointer;
+  padding: 0;
+  font: inherit;
+  text-align: left;
+}
+
+.link-button:hover {
+  color: var(--accent);
+}

@@ -1,0 +1,382 @@
+import type { Kata } from './types'
+
+/**
+ * Ten katas from Neal Ford's list (https://nealford.com/katas/list.html),
+ * originally written by Ted Neward (https://www.architecturalkatas.com). Every
+ * entry keeps its attribution in `sourceUrl`, `sourceName` and `author`. Texts
+ * are lightly paraphrased: every fact kept, grammar tidied, abbreviations
+ * expanded, one requirement per entry.
+ */
+export const katas: Kata[] = [
+  {
+    id: 'going-going-gone',
+    title: 'Going, Going, Gone',
+    sourceUrl: 'https://nealford.com/katas/kata?id=GoingGoingGone',
+    sourceName: 'Architectural Katas (Neal Ford)',
+    author: 'Ted Neward / Neal Ford',
+    summary:
+      'An auction company wants to take its auctions online at a nationwide scale. Customers choose the auction they want to join, wait until it begins, then bid as if they were in the room with the auctioneer.',
+    users:
+      'Scale up to hundreds of participants per auction, potentially thousands, and as many simultaneous auctions as possible',
+    requirements: [
+      'Auctions must be categorised and discoverable',
+      'Auctions must be as real-time as possible',
+      'Auctions must be mixed, with bidders in the room and bidders online taking part in the same auction',
+      'A video stream of the action must be available after the fact',
+      'The system must handle the exchange of money',
+      'Participants must be tracked through a reputation index',
+    ],
+    additionalContext: [
+      'The auction company is expanding aggressively by merging with smaller competitors',
+      'If the nationwide auction is a success, the model will be replicated overseas',
+      'Budget is not constrained, this is a strategic direction',
+      'The company has just exited a lawsuit in which it settled a suit alleging fraud',
+    ],
+    tags: ['real-time', 'money', 'video', 'scale'],
+    difficulty: 'intermediate',
+    goodFor: [
+      'Forces a real conversation about what real-time means when bids arrive from across a whole country',
+      'The fraud settlement makes auditability and trust concrete instead of a checkbox on a list',
+      'Rich enough for a C2 round, since bidding, payments, video and reputation each pull in a different direction',
+    ],
+    facilitatorHints: [
+      'Likely drivers: performance, elasticity, scalability and auditability, with security and reliability close behind because money changes hands',
+      'Classic trap: designing the bidding engine in detail while the live-plus-online mix, the payment flow and the video pipeline stay unexplored',
+      'An unconstrained budget is not a licence for complexity, the merger strategy argues for a system that can absorb acquired auction houses',
+      'Be ready for the question "Can an online bidder beat someone in the room?" and answer yes, that is the whole point, and the hammer must be fair to both',
+    ],
+  },
+  {
+    id: 'check-your-work',
+    title: 'Check Your Work',
+    sourceUrl: 'https://nealford.com/katas/kata?id=CheckYourWork',
+    sourceName: 'Architectural Katas (Neal Ford)',
+    author: 'Ted Neward / Neal Ford',
+    summary:
+      'A university has greatly expanded its computer science course and wants to automate the grading of simple programming assignments.',
+    users: '300+ students per year, plus teaching staff and administrators',
+    requirements: [
+      'Students upload their source code, which is run and graded automatically',
+      'Grades and grading runs must be persistent and auditable',
+      'Plagiarism detection is required, comparing each submission with the others and submitting it to a web-based service (TurnItIn)',
+      'The system must integrate with the university\'s learning management system (LMS)',
+      'The professor sets a due date and time, after which late submissions are rejected or penalised',
+      'Students can submit as many attempts as they like to improve their grade',
+      'Professors determine the grading criteria, which may include code metrics, tests or both',
+    ],
+    additionalContext: [
+      'The university\'s LMS is mainframe based and quite difficult to change',
+      'Grades are audited each year by a state regulatory body',
+      'The university has very little budget for IT because it is building a spare stadium for SportsBall',
+      'The university has a record for the highest-performing computer science graduates in the country',
+    ],
+    tags: ['integration', 'audit', 'budget', 'batch'],
+    difficulty: 'starter',
+    goodFor: [
+      'A friendly first kata for teams that build back-office software: batch runs, integration and audit trails instead of web scale',
+      'The mainframe LMS and the tiny budget start a good argument about where to put the integration seam',
+      'Running code written by students makes security tangible before anyone says the word',
+    ],
+    facilitatorHints: [
+      'Likely drivers: auditability, cost, security (the system executes untrusted student code) and integration with a system that will not change',
+      'Classic trap: spending the round on the code runner and never drawing the LMS, TurnItIn or the auditor as external actors on the C1',
+      'Deadlines turn this into a batch problem in disguise, the whole cohort submits in the last ten minutes',
+      'Be ready for the question "Can we change the LMS?" and answer no, you get a nightly file export and a login page, nothing more',
+    ],
+  },
+  {
+    id: 'the-road-warrior',
+    title: 'The Road Warrior',
+    sourceUrl: 'https://nealford.com/katas/kata?id=TheRoadWarrior',
+    sourceName: 'Architectural Katas (Neal Ford)',
+    author: 'Ted Neward / Neal Ford',
+    summary:
+      'A major travel agency wants to build the next-generation online trip management dashboard. Travellers see all of their existing reservations organised by trip, online or on their mobile device.',
+    users: '10,000+ registered users worldwide',
+    requirements: [
+      'The system must interface with the agency\'s existing airline, hotel and car rental systems to load reservations automatically through frequent flyer, hotel points and car rental rewards accounts',
+      'Customers can also add existing reservations by hand',
+      'Dashboard items are grouped by trip and are archived off the dashboard automatically once the trip is complete',
+      'Users can share their trip information through the standard social media sites',
+      'Travellers are notified of changes to their reservations, such as a gate change or a delayed flight',
+      'The user interface must be as rich as possible on every deployment platform',
+    ],
+    additionalContext: [
+      'The system must integrate seamlessly with the existing travel systems',
+      'Partnership deals are being negotiated to create favoured vendors',
+      'The system must work internationally',
+    ],
+    tags: ['integration', 'mobile', 'international'],
+    difficulty: 'intermediate',
+    goodFor: [
+      'Integration heavy: the interesting boxes are the ones the team does not own, so the C1 fills up with external systems',
+      'The favoured-vendor deals invite a talk about how commercial strategy leaks into architecture',
+      'International use raises time zones, languages and data residency early, which is rare in a kata',
+    ],
+    facilitatorHints: [
+      'Likely drivers: interoperability, reliability of partner integrations, evolvability as vendors come and go, and performance on mobile networks',
+      'Classic trap: drawing one big Integration Service box and calling it done, push the group to name the protocols and what happens when an airline API is down',
+      'The dashboard is read-mostly, so caching and staleness are the real design question, not throughput',
+      'Be ready for the question "How do we get the data out of the airlines?" and answer that every vendor offers a different API, two of them are nightly batch files',
+    ],
+  },
+  {
+    id: 'lights-please',
+    title: 'Lights, Please',
+    sourceUrl: 'https://nealford.com/katas/kata?id=LightsPlease',
+    sourceName: 'Architectural Katas (Neal Ford)',
+    author: 'Ted Neward / Neal Ford',
+    summary:
+      'A home electronics giant wants to build a system for home automation: turning lights on and off, locking and unlocking doors, remote camera observation, and future behaviour that nobody has specified yet.',
+    users:
+      'Each system is sold to consumers (small families), and the company expects to sell thousands of units in the first three years',
+    requirements: [
+      'The system must be as turnkey as possible, yet sold in modular units (camera, lock, thermostat and so on) for easy purchase',
+      'The units must be accessible over the internet for remote monitoring and access, using the customer\'s existing Wi-Fi router and connection',
+      'Customers can program the system to control the various modules according to their own needs',
+      'Other groups handle the electrical engineering of the units and will implement the module side of whatever control protocol you specify',
+      'Future modules must plug into the system without a redesign',
+    ],
+    additionalContext: [
+      'The company is willing to invest a large sum to get this new line of business off the ground',
+      'The company collects data from customers who opt in, to gather broader statistics',
+      'The company operates internationally',
+    ],
+    tags: ['iot', 'extensibility', 'consumer', 'security'],
+    difficulty: 'starter',
+    goodFor: [
+      'A starter kata where the interesting boundary is physical: what lives in the home, what lives in the cloud, and what happens when the Wi-Fi drops',
+      'The unspecified future modules make extensibility the headline, a natural bridge to the microkernel style',
+      'Cameras and door locks in a family home make security and privacy impossible to skip',
+    ],
+    facilitatorHints: [
+      'Likely drivers: security, extensibility, reliability without an internet connection, and simplicity for a consumer who will never read the manual',
+      'Classic trap: designing a cloud platform and forgetting that the door must still unlock when the internet is down',
+      'Groups love inventing the module protocol, remind them the kata asks for the shape of the system, not the wire format',
+      'Be ready for the question "Does it have to work without the internet?" and answer yes, locks and lights keep working locally, remote access is the extra',
+    ],
+  },
+  {
+    id: 'going-green',
+    title: 'Going Green',
+    sourceUrl: 'https://nealford.com/katas/kata?id=GoingGreen',
+    sourceName: 'Architectural Katas (Neal Ford)',
+    author: 'Ted Neward / Neal Ford',
+    summary:
+      'A large electronics store wants to get into the electronics recycling business and needs a new system to support it. Customers send in their small personal electronics, or use kiosks at the mall, and may get money for equipment that still works.',
+    users: 'Hundreds of customers, hopefully thousands to millions',
+    requirements: [
+      'Customers can get a quote for used personal electronics (phones, cameras and so on) through the web or a kiosk at a mall',
+      'Customers receive a box in the mail, send in their device and get a check if it is in good working order',
+      'Received equipment is assessed (inspected) to decide whether it is recycled (destroyed safely) or resold (on eBay and similar)',
+      'The company expects to add five to ten new types of accepted electronics every month',
+      'Each type of electronics has its own set of rules for quoting and assessment',
+      'Every item is tracked through the whole process, from quote to box, inspection and check, recycling or resale',
+      'The list of equipment the company is willing to accept is maintained in the system',
+    ],
+    additionalContext: [
+      'This is a highly competitive business and a new line of business for the company',
+      'Any type of equipment that has not been received for a year is removed from the system',
+      'The list of accepted equipment changes often',
+      'Each piece of equipment has its own assessment (inspection) rules',
+      'The company has the right to change the original quote if the product is not in the condition the customer claimed',
+    ],
+    tags: ['workflow', 'kiosk', 'rules', 'logistics'],
+    difficulty: 'starter',
+    goodFor: [
+      'A workflow kata: one item passes through quote, shipping, inspection and payout, which draws naturally as a pipeline',
+      'Rules that change monthly start the conversation about where business rules live and who edits them',
+      'The kiosk adds a second, very different front end to the same process',
+    ],
+    facilitatorHints: [
+      'Likely drivers: extensibility of the rule set, cost in a low-margin business, traceability of each item, and time to market against competitors',
+      'Classic trap: modelling the device catalogue in detail and forgetting the people in the warehouse who do the inspection',
+      'Ask whether a quote is a promise, the re-quote rule makes the money flow more interesting than it looks',
+      'Be ready for the question "Who writes the assessment rules?" and answer that a small business team changes them weekly and will not wait for a release',
+    ],
+  },
+  {
+    id: 'ill-have-the-blt',
+    title: 'I\'ll Have the BLT',
+    sourceUrl: 'https://nealford.com/katas/kata?id=BLT',
+    sourceName: 'Architectural Katas (Neal Ford)',
+    author: 'Ted Neward / Neal Ford',
+    summary:
+      'A national sandwich shop wants to take orders over the internet, in addition to its current fax-in service.',
+    users: 'Thousands of customers, perhaps one day millions',
+    requirements: [
+      'Users place their order and are given a pickup time and directions to the shop, which must integrate with several external mapping services that include traffic information',
+      'If the shop offers a delivery service, a driver is dispatched with the sandwich to the user',
+      'The system must be accessible from mobile devices',
+      'The system offers national daily promotions and specials',
+      'The system offers local daily promotions and specials',
+      'Payment is accepted online, or in person at pickup or on delivery',
+    ],
+    additionalContext: [
+      'The sandwich shops are franchised, each with a different owner',
+      'The parent company has near-future plans to expand overseas',
+      'The corporate goal is to hire inexpensive labour to maximise profit',
+    ],
+    tags: ['franchise', 'integration', 'mobile', 'international'],
+    difficulty: 'starter',
+    goodFor: [
+      'A starter kata with a twist: the franchise model means one system serves hundreds of owners who did not ask for it',
+      'The mapping services and traffic data make external dependencies visible on the C1 from the first minute',
+      'The cheap-labour goal is a great prompt for discussing what the architecture must do because the people will not',
+    ],
+    facilitatorHints: [
+      'Likely drivers: availability at the lunchtime peak, elasticity, cost, and configurability per franchise and per country',
+      'Classic trap: treating every shop as identical, ask who owns the menu, the prices and the local promotions',
+      'Franchisees run their own tills and printers, so integration with the shop floor is where the design gets real',
+      'Be ready for the question "Do franchisees have to use it?" and answer that head office wants them to but cannot force them, so adoption must be painless',
+    ],
+  },
+  {
+    id: 'sysop-squad',
+    title: 'Sysop Squad',
+    sourceUrl: 'https://nealford.com/katas/kata?id=SysopSquad',
+    sourceName: 'Architectural Katas (Neal Ford)',
+    author: 'Ted Neward / Neal Ford',
+    summary:
+      'An electronics giant needs a new trouble-ticket system for its customer-facing IT consultants, the Sysop Squad, in its stores nationwide.',
+    users: 'Thousands of customers, hundreds of consultants and hundreds of store staff',
+    requirements: [
+      'Trouble tickets can be entered by call-centre receptionists, store staff or customers online',
+      'Tickets are routed to the appropriate consultant based on location, availability and skill',
+      'Consultants should only need a mobile device',
+      'Customers enter an evaluation of the consultant after the service',
+      'Consultants track the work performed in the customer records for future reference',
+    ],
+    additionalContext: [
+      'Uptime is critical to the company\'s reputation',
+      'The site\'s performance must degrade gracefully under heavy load',
+      'Good routing of requests is critical to making a profit',
+    ],
+    tags: ['routing', 'availability', 'mobile', 'workflow'],
+    difficulty: 'intermediate',
+    goodFor: [
+      'The running example of Software Architecture: The Hard Parts, so the group can compare its result with the book afterwards',
+      'Routing, availability and graceful degradation give the C2 round real trade-offs between a monolith and services',
+      'Three kinds of users on different devices make the C1 more than a single box',
+    ],
+    facilitatorHints: [
+      'Likely drivers: availability, fault tolerance, performance under load, and the accuracy and evolvability of the routing rules',
+      'Classic trap: solving routing with a clever algorithm while ignoring what happens when the routing part is down and tickets pile up',
+      'Graceful degradation is a design requirement, ask the group which features may fail under load and which never may',
+      'Be ready for the question "What makes a consultant available?" and answer that it is a mix of calendar, current location and a skill profile the consultant maintains',
+    ],
+  },
+  {
+    id: 'room-with-a-view',
+    title: 'Room with a View',
+    sourceUrl: 'https://nealford.com/katas/kata?id=RoomWithAView',
+    sourceName: 'Architectural Katas (Neal Ford)',
+    author: 'Ted Neward / Neal Ford',
+    summary:
+      'A large hotel reservation company wants to build the next-generation reservation and management system for high-end resorts and spas, where guests can view and reserve specific rooms.',
+    users: 'Guests (hundreds) and hotel staff (fewer than 20)',
+    requirements: [
+      'Registration can be made via the web, a mobile device, a phone call or a walk-in',
+      'Guests can book a type of room (standard, deluxe or suite) or choose a specific room by viewing pictures of each room and its location in the hotel',
+      'The system maintains the room status (booked, available, ready to clean and so on) as well as when the room is needed next',
+      'State-of-the-art housekeeping management directs cleaning and maintenance staff to rooms by priority and reservation need, using proprietary devices attached to the cleaning carts',
+      'The system integrates with the smart room locks so that a guest\'s phone opens the reserved room',
+      'Standard reservation functionality such as payments and registration details is handled by the existing reservation system',
+      'The system is web-based and hosted by the reservation company',
+    ],
+    additionalContext: [
+      'Peak season is quickly approaching, so the system must be ready quickly or wait until next year',
+      'The company is investing heavily in cutting-edge technology such as smart room locks that open via a mobile phone',
+      'The company is only interested in the high-end market',
+      'Sales people have tremendous clout in the organisation, people often scramble to make their promises come true',
+    ],
+    tags: ['deadline', 'iot', 'booking'],
+    difficulty: 'starter',
+    goodFor: [
+      'Time to market is the loudest requirement, which makes the group choose what not to build',
+      'The existing reservation system and the smart locks give the C1 two very different external systems',
+      'A small user base with a demanding audience shows that scale is not always the point',
+    ],
+    facilitatorHints: [
+      'Likely drivers: time to market, simplicity, integration with the existing reservation system, and security around locks that open real doors',
+      'Classic trap: rebuilding reservations and payments from scratch when the kata says the existing system already does that',
+      'The clout of the sales people means scope grows mid-round, use it and add a freshly promised feature halfway through the timer',
+      'Be ready for the question "Can the deadline move?" and answer no, the season starts in four months and sales has already sold the room picker',
+    ],
+  },
+  {
+    id: 'hot-diggety-dog',
+    title: 'Hot Diggety Dog!',
+    sourceUrl: 'https://nealford.com/katas/kata?id=HotDiggetyDog',
+    sourceName: 'Architectural Katas (Neal Ford)',
+    author: 'Ted Neward / Neal Ford',
+    summary: 'A local hot dog stand merchant wants a point-of-sale system for his hot dog stand operators.',
+    users:
+      'Fifty or so hot dog stand operators, plus thousands of customers in the local area reached through social media',
+    requirements: [
+      'The system must be lightweight in size, a laptop is too unwieldy to use efficiently while making hot dogs on the street',
+      'Operators can give discounts',
+      'Sales are tracked by time and location',
+      'Inventory updates are sent to the mobile inventory-management staff, who drive to the stand with supplies',
+      'Social-media integration notifies customers when a hot dog stand is nearby',
+      'Information can be exported in a format the accounting tools can import',
+    ],
+    additionalContext: [
+      'The merchant was forced into this because the current hodgepodge of ways to track sales needs too much manual effort',
+      'Time to completion is important',
+      'Building a solution that will not need replacement in three years is more important',
+      'There are no serious budget constraints',
+    ],
+    tags: ['mobile', 'offline', 'small', 'first-kata'],
+    difficulty: 'starter',
+    goodFor: [
+      'Recommended first kata: small enough to draw a C1 in ten minutes',
+      'Everyone understands a hot dog stand, so the group argues about architecture rather than the domain',
+      'Street stands with patchy connectivity make offline behaviour a real question, not a footnote',
+    ],
+    facilitatorHints: [
+      'Likely drivers: simplicity, cost, reliability at a stand without signal, and evolvability so the system survives three years of growth',
+      'Classic trap: designing an enterprise platform for fifty carts, the three-year horizon is about not painting yourself into a corner, not about scale',
+      'Be ready for the question "Is there always a mobile signal?" and answer no, some of the best spots are underground stations and festival fields',
+    ],
+  },
+  {
+    id: 'wheres-fluffymon',
+    title: 'Where\'s Fluffymon?',
+    sourceUrl: 'https://nealford.com/katas/kata?id=WheresFluffy',
+    sourceName: 'Architectural Katas (Neal Ford)',
+    author: 'Ted Neward / Neal Ford',
+    summary:
+      'A service for missing pets, with rewards brokered by the service and GPS data points of sightings shown as augmented reality overlays of the last-seen locations.',
+    users:
+      'Dozens of missing pet owners and hundreds of spotters initially, broader depending on the success of the rollout',
+    requirements: [
+      'Users interested in finding pets register on the site',
+      'Anyone can see a list of pets missing near their location',
+      'Pet finders can post "pet found" messages with mandatory photo proof and collect the reward once the owner confirms',
+      'Users can comment on missing-pet entries with data points such as a sighting or an area checked with no result',
+      'The service must be accessible from mobile devices',
+    ],
+    additionalContext: [
+      'This is one of a host of augmented reality services the parent company is launching',
+      'Scalability is local, per city, but the service may scale out to other cities',
+      'The company wants to create a larger social community around pets',
+      'Potential ad revenue from partners such as pet stores could run into millions',
+    ],
+    tags: ['mobile', 'geo', 'social', 'payments'],
+    difficulty: 'intermediate',
+    goodFor: [
+      'Geo, social and payments in one small domain, so every group finds something it has not built before',
+      'Per-city scaling starts a good discussion about deployment units and data locality',
+      'Photo proof and brokered rewards bring fraud and trust to the table in a light-hearted setting',
+    ],
+    facilitatorHints: [
+      'Likely drivers: scalability per city, security of the reward money, extensibility as one of a family of AR services, and cost while the revenue is only potential',
+      'Classic trap: obsessing over the augmented reality client while the reward escrow, the notification flow and comment moderation go undesigned',
+      'A parent company launching many AR services hints at shared platform pieces, ask the group what it would reuse',
+      'Be ready for the question "Who holds the reward money?" and answer that the service does, in escrow, and takes a cut when the owner confirms',
+    ],
+  },
+]
+
+export const kataById = Object.fromEntries(katas.map((k) => [k.id, k])) as Record<string, Kata>
